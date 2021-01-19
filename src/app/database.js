@@ -6,15 +6,15 @@ const connections = mysql.createPool({
   port: 3306,
   database: 'coderhub',
   user: 'root',
-  password: '123456'
+  password: '12345678'
 })
 
 connections.getConnection((err, conn) => {
   conn.connect((err) => {
     if(err) {
-      console.log("连接失败~",err)
+      console.log('连接失败');
     }else {
-      console.log("连接成功~")
+      console.log('连接成功~');
     }
   })
 })
