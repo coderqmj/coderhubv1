@@ -12,6 +12,14 @@ const errorHandle = (error, ctx) => {
       status = 409; // Bad Request
       message = "用户已经存在~"
       break;
+    case errorTypes.USER_NOT_EXISTS:
+      status = 404; // Bad Request
+      message = "用户不存在~"
+      break; 
+    case errorTypes.ERROR_PASSWORD:
+      status = 404; // Bad Request
+      message = "密码错误~"
+      break; 
     default:
       status = 404;
       message = "NOT FOUND~";
