@@ -1,6 +1,10 @@
 const service = require('../service/user.service');
 const errorTypes = require('../constants/error-types');
 const md5password = require('../utils/password-handle');
+const jwt = require('jsonwebtoken');
+const {
+  PUBLIC_KEY
+} = require('../app/config')
 
 const verifyLogin = async (ctx, next) => {
   // 1.获取用户名密码
@@ -32,6 +36,28 @@ const verifyLogin = async (ctx, next) => {
   await next();
 }
 
+const verifyAuth = async (ctx, next) => {
+  console.log("验证授权的middleware~");
+
+  // 1.获取token
+  const authorization = ctx.headers.authorization;  // 存储在头部字段中
+  const token = authorization.replace('Bearer ', ''); // 将头部字段中的Bearer 去除，只取token相关
+
+  // 2.验证token 需要拿到公钥 传入token，公钥，加密算法，返回结果里面有生成token的id，name信息
+  try {
+    const result = jwt.verify(token, PUBLIC_KEY, {
+      algorithms: ['RS256']
+    });
+    ctx.user = result;
+    await next();
+  } catch (err) {
+    const error = new Error(errorTypes.UNAUTHORIZATION);
+    ctx.app.emit('error', error, ctx);
+  }
+
+}
+
 module.exports = {
-  verifyLogin
+  verifyLogin,
+  verifyAuth
 }

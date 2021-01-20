@@ -20,6 +20,10 @@ const errorHandle = (error, ctx) => {
       status = 404; // Bad Request
       message = "密码错误~"
       break; 
+    case errorTypes.UNAUTHORIZATION:
+      status = 401; // Bad Request
+      message = "未授权~"
+      break; 
     default:
       status = 404;
       message = "NOT FOUND~";
