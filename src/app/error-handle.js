@@ -24,6 +24,10 @@ const errorHandle = (error, ctx) => {
       status = 401; // Bad Request
       message = "未授权~"
       break; 
+    case errorTypes.NO_OPERATION:
+      status = 401; // Bad Request
+      message = "没有操作权限~"
+      break; 
     default:
       status = 404;
       message = "NOT FOUND~";

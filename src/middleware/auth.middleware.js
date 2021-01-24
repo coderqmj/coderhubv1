@@ -1,4 +1,5 @@
 const service = require('../service/user.service');
+const authService = require('../service/auth.service');
 const errorTypes = require('../constants/error-types');
 const md5password = require('../utils/password-handle');
 const jwt = require('jsonwebtoken');
@@ -6,6 +7,7 @@ const {
   PUBLIC_KEY
 } = require('../app/config')
 
+// 验证登录密码
 const verifyLogin = async (ctx, next) => {
   // 1.获取用户名密码
   const { name, password } = ctx.request.body;
@@ -36,6 +38,7 @@ const verifyLogin = async (ctx, next) => {
   await next();
 }
 
+// 验证token
 const verifyAuth = async (ctx, next) => {
   console.log("验证授权的middleware~");
 
@@ -57,7 +60,29 @@ const verifyAuth = async (ctx, next) => {
 
 }
 
+const verifyPermission = async (ctx, next) => {
+  console.log("验证是否具有操作权限middleware~");
+  // 1.获取参数
+  const { momentId } = ctx.params;
+  const { id } = ctx.user;
+
+  // 2.查询是否具有权限
+  try {
+    const isPermission = await authService.checkMoment(momentId, id);
+    if(!isPermission) throw new Error();
+    await next();
+  } catch (err) {
+    const error = new Error(errorTypes.NO_OPERATION);
+    return ctx.app.emit('error', error, ctx);
+  }
+  // if(!isPermission) {
+   
+  // }
+  // await next();
+}
+
 module.exports = {
   verifyLogin,
-  verifyAuth
+  verifyAuth,
+  verifyPermission
 }

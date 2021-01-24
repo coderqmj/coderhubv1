@@ -1,4 +1,5 @@
-const service = require('../service/moment.service');
+const momentService = require('../service/moment.service');
+const authService = require('../service/auth.service');
 
 class momentController {
   async create (ctx, next) {
@@ -8,7 +9,7 @@ class momentController {
 
     const {content} = obj;
     console.log(userId, content)
-    const result = await service.create(userId, content);
+    const result = await momentService.create(userId, content);
 
     ctx.body = result;
   }
@@ -18,7 +19,7 @@ class momentController {
     // 1.获取动态的Id
     const momentId = ctx.params.momentId;
 
-    const result = await service.detail(momentId);
+    const result = await momentService.detail(momentId);
 
     ctx.body = result[0][0];
   }
@@ -28,11 +29,30 @@ class momentController {
     // 1.获取数据（offset/size）
     const { offset, size } = ctx.query;
     // 2.查询列表
-    const result = await service.list(offset, size);
+    const result = await momentService.list(offset, size);
 
     ctx.body = result[0][0];
   }
 
+  async update(ctx, next) {
+    // 1.获取参数
+    const { momentId } = ctx.params;
+    const { content } = ctx.request.body;
+
+    // 2.修改内容
+    const result = await momentService.updateMoment(content, momentId);
+    ctx.body = result;
+  }
+
+  // 删除动态
+  async deleteMoment(ctx, next) {
+    // 1.获取参数
+    const { momentId } = ctx.params;
+
+    // 2.修改内容
+    const result = await momentService.deleteMoment(momentId);
+    ctx.body = result;
+  }
 }
 
 module.exports= new momentController();

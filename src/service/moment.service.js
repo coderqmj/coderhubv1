@@ -4,7 +4,7 @@ class MomentService {
   async create(userId, content) {
     const statement = `insert into moment (content, user_id) values (?,?)`;
     
-    const [result] = connections.execute(statement, [content, userId]);
+    const [result] = await connections.execute(statement, [content, userId]);
 
     return result;
   }
@@ -19,7 +19,7 @@ class MomentService {
     left join users u on u.id = m.user_id
     where m.id = ?;`;
 
-    const result = connections.execute(statement, [momentId]);
+    const result = await connections.execute(statement, [momentId]);
     console.log("查询成功~")
     return result;
   }
@@ -33,8 +33,22 @@ class MomentService {
     right join users u on u.id = m.user_id
     limit ?, ?;`;
 
-    const result = connections.execute(statement, [offset, size]);
+    const result = await connections.execute(statement, [offset, size]);
     console.log("查询成功~")
+    return result;
+  }
+
+  async updateMoment(content, momentId) {
+    const statement = `
+      update moment set content = ? where id = ?
+    `
+    const [result] = await connections.execute(statement, [content, momentId]);
+    return result;
+  }
+
+  async deleteMoment(momentId) {
+    const statement = `delete from moment where id = ?;`
+    const [result] = await connections.execute(statement, [momentId]);
     return result;
   }
 }
