@@ -22,7 +22,7 @@ const errorHandle = (error, ctx) => {
       break; 
     case errorTypes.UNAUTHORIZATION:
       status = 401; // Bad Request
-      message = "未授权~"
+      message = "无效的token~"
       break; 
     case errorTypes.NO_OPERATION:
       status = 401; // Bad Request

@@ -44,6 +44,10 @@ const verifyAuth = async (ctx, next) => {
 
   // 1.获取token
   const authorization = ctx.headers.authorization;  // 存储在头部字段中
+  if(!authorization) {
+    const error = new Error(errorTypes.UNAUTHORIZATION);
+    return ctx.app.emit('error', error, ctx);
+  }
   const token = authorization.replace('Bearer ', ''); // 将头部字段中的Bearer 去除，只取token相关
 
   // 2.验证token 需要拿到公钥 传入token，公钥，加密算法，返回结果里面有生成token的id，name信息
