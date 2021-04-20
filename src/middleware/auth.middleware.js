@@ -28,12 +28,13 @@ const verifyLogin = async (ctx, next) => {
   // 4.判断密码是否匹配
   // 因为两个使用的时相同的加密算法，所以获取到数据库查询到的password用同样的加密算法进行比较
   const { PASSWORD } = result[0];
+  console.log(PASSWORD,result)
   const inputPassword = md5password(password);
-  if (PASSWORD !== inputPassword) {
+  if (result[0].password !== inputPassword) {
     const error = new Error(errorTypes.ERROR_PASSWORD);
     return ctx.app.emit('error', error, ctx);
   }
-
+  console.log("登陆成功")
   ctx.user = user;
   await next();
 }
