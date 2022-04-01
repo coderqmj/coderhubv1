@@ -5,8 +5,8 @@ const connections = mysql.createPool({
   host: 'localhost',
   port: 3306,
   database: 'coderhub',
-  user: 'root',
-  password: '12345678'
+  user: 'coderqmj',
+  password: 'Qmj19980401..'
 })
 
 connections.getConnection((err, conn) => {
